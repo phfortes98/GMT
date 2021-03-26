@@ -99,15 +99,17 @@ const initialSchema = createSchema({
     { id: 'node-1', content: 'We', coordinates: [200, 360],  },
     { id: 'node-2', content: 'are', coordinates: [300, 360], },
     { id: 'node-3', content: 'capable', coordinates: [400, 360], },
+    /*
     { id: 'node-lvl2-1', coordinates: [200, 280], render: CustomNode,},
     { id: 'node-lvl2-2', coordinates: [300, 280], render: CustomNode,},
     { id: 'node-lvl2-3', coordinates: [400, 280], render: CustomNode,},
     { id: 'node-lvl3-1', coordinates: [200, 200], render: CustomNode2,},
     { id: 'node-lvl3-2', coordinates: [350, 200], render: CustomNode2,},
     { id: 'node-lvl4-1', coordinates: [275, 120], render: CustomNode3,},
+    */
   ],
   links: [
-    
+    /*
    { input: 'node-lvl2-1',  output: 'node-1', readonly: true },
    { input: 'node-lvl2-2',  output: 'node-2', readonly: true },
    { input: 'node-lvl2-3',  output: 'node-3', readonly: true },
@@ -116,6 +118,7 @@ const initialSchema = createSchema({
    { input: 'node-lvl3-2',  output: 'node-lvl2-3', readonly: true },
    { input: 'node-lvl4-1',  output: 'node-lvl3-1', readonly: true },
    { input: 'node-lvl4-1',  output: 'node-lvl3-2', readonly: true },
+   */
    
   ]
 });
