@@ -56,9 +56,7 @@
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-              <label for="input-sentence" style="color: black">Enter sentence: </label>
-              <input id='input-sentence' type="text">
-              <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="savesentence()">Submit</button>
+              <div id='form-container'></div>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
               <label for="button" style="color: black; margin-right: 10px">Upload Project: </label>
@@ -110,7 +108,7 @@
             </li>
             <a class="nav-link" href="#">
               <label>Print </label>
-              <button type="button" class="btn btn-primary btn-sm">
+              <button type="button" class="btn btn-primary btn-sm" onclick="printDiagram()">
                 <img src="images/print_icon.png" style="width: 16px; height: auto" alt="GMT print icon">
               </button>
             </a>
@@ -135,13 +133,13 @@
         </div>
       </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container-fluid" >
 
     <div class="row canvas-container">
 
       <!-- Pallete-->
 
-      <div class="pallete-container col-md-3 col-lg-2 d-none d-md-block">
+      <div class="pallete-container col-md-3 col-lg-2 d-none d-md-block" style='height: 500px'>
         <header class="row justify-content-center pallete-header">Dock Pallete</header>
 
 
@@ -239,8 +237,9 @@
     <!--footer-->
     <nav class="footer navbar justify-content-center fixed-bottom navbar-light" style="background-color: #2e206d; text-align: center;">
       
-      <div class="footer-buttons">
-        <label>Create</label>
+      <div class="footer-buttons" id='footer-buttons'>
+
+        <!-- <label>Create</label>
         <button type="button" class="btn btn-success btn-sm"><img src="images/mknode-icon.png"
             style="width: 1rem; height:auto" alt=""></button>
         <label>Delete</label>
@@ -248,7 +247,7 @@
             style="width: 1rem; height:auto" alt=""></button>
         <label>Merge</label>
         <button type="button" class="btn btn-warning btn-sm"><img src="images/merge-node.png"
-            style="width: 1rem; height:auto" alt=""></button>
+            style="width: 1rem; height:auto" alt=""></button> -->
       </div>
       
     </nav>
@@ -270,6 +269,15 @@
       alert("The input sentence is:"+sentence);
     }
     
+  </script>
+  <script>
+    function printDiagram(){
+    var restorepage=document.body.innerHTML;
+    var printcontent=document.getElementById('root').innerHTML;
+    document.body.innerHTML="<h1 style='justify-self: center'>Grammar Mapping Tool Diagram<h1/>"+printcontent;
+    window.print();
+    document.body.innerHTML=restorepage;
+    }
   </script>
 
 

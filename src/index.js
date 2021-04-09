@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Form from './components/Form'
+import ControlButtons from './components/ControlButtons'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -10,6 +12,13 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+ReactDOM.render(
+  <React.StrictMode>
+    < ControlButtons />
+  </React.StrictMode>,
+  document.getElementById('footer-buttons')
+);
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
