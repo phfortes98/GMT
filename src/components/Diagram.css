@@ -221,3 +221,11 @@
     -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset, 5px 0 5px -3px rgba(0, 0, 0, .2) inset;
     box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset, 5px 0 5px -3px rgba(0, 0, 0, .2) inset;
   }
+  .submitf {
+      height: 12px;
+      width: 12px;
+      border-style: none;
+      border-radius: 20%;
+      background-color: 'red';
+      text-align: center;
+  }

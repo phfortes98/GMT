@@ -274,7 +274,7 @@
     function printDiagram(){
     var restorepage=document.body.innerHTML;
     var printcontent=document.getElementById('root').innerHTML;
-    document.body.innerHTML="<h1 style='justify-self: center'>Grammar Mapping Tool Diagram<h1/>"+printcontent;
+    document.body.innerHTML="<div style='text-align: center'><h1 style='justify-self: center; font-size: 16px'>Grammar Mapping Tool Diagram<h1/></div>"+printcontent;
     window.print();
     document.body.innerHTML=restorepage;
     }
