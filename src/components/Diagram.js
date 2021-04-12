@@ -1,6 +1,7 @@
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import { Button } from 'beautiful-react-ui';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
+
 import './Diagram.css'
 
 import sentence from './Form';
@@ -30,9 +31,10 @@ const NewNode = ({ }) => (
 const UncontrolledDiagram = ({ sentence }) => {
   // create diagrams schema
 
-  const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
+  const [schema, { onChange, addNode, addLink, removeNode }] = useSchema(initialSchema);
 
-  let selected=[]
+  const [selected, setSelected] = useState([]);
+  
 
   const clickNode = (id) => {
     console.log(`${id} clicked!`);
@@ -44,7 +46,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     else{ selected.push(id)}
     console.log(selected);
-    
+    setSelected(selected);
   }
   const BaseNode = ({ content,id}) => (
     <div className='button active' style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
@@ -80,13 +82,66 @@ const UncontrolledDiagram = ({ sentence }) => {
     removeNode(nodeToRemove);
   };
 
+  const findcoordinates=()=>{
+    let maxXCoordinate=0;
+    let minXCoordinate=0;
+    let minYCoordinate=0;
+    let resultY=0;
+    let resultX=0;
+    let firstnode=true;
+    selected.forEach((selectedNodeId)=>{
+      
+      const fullnodeinfo=schema.nodes.find(node=>node.id===selectedNodeId);
+      
+      if(firstnode){
+        console.log(`The first node has coordinates: (${fullnodeinfo.coordinates[0]},${fullnodeinfo.coordinates[1]})`)
+        maxXCoordinate=fullnodeinfo.coordinates[0];
+        minXCoordinate=fullnodeinfo.coordinates[0];
+        minYCoordinate=fullnodeinfo.coordinates[1];
+        console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        firstnode=false;
+      }
+      else if(fullnodeinfo.coordinates[0]<maxXCoordinate){
+        if(fullnodeinfo.coordinates[0]<minXCoordinate){
+          minXCoordinate=fullnodeinfo.coordinates[0];
+          console.log(`Min X coordinate was updated to: ${minXCoordinate}`);
+          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+
+        }
+
+        if(fullnodeinfo.coordinates[1]<minYCoordinate){
+          minYCoordinate=fullnodeinfo.coordinates[1];
+          console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
+          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        }
+      }
+      else{
+        maxXCoordinate=fullnodeinfo.coordinates[0];
+        console.log(`Max X coordinate was updated to: ${maxXCoordinate}`);
+          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        if(fullnodeinfo.coordinates[1]<minYCoordinate){
+          minYCoordinate=fullnodeinfo.coordinates[1];
+          console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
+          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        }
+      }
+    })
+    resultX=(minXCoordinate+maxXCoordinate)/2;
+    resultY=minYCoordinate-80;
+
+    return [resultX,resultY];
+
+  }
+
   const createNode = () => {
+    let desiredcoordinates=findcoordinates();
+    console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
     const nextNode = {
       id: `node-${schema.nodes.length + 1}`,
       content: `Node ${schema.nodes.length + 1}`,
       coordinates: [
-        schema.nodes[schema.nodes.length - 1].coordinates[0] + 100,
-        schema.nodes[schema.nodes.length - 1].coordinates[1],
+        desiredcoordinates[0] ,
+        desiredcoordinates[1],
       ],
       render: NewNode,
       data: { onClick: deleteNodeFromSchema },
@@ -95,6 +150,23 @@ const UncontrolledDiagram = ({ sentence }) => {
     };
 
     addNode(nextNode);
+
+    //let newlink={input: nextNode.id, output: 'node-0'};
+    console.log(`The nodes currently selected are ${selected}.`);
+    //console.log(JSON.stringify(newlink));
+    //schema.links.push(newlink);
+    let newlink={}
+    
+    selected.forEach(function(selectedId){
+      newlink={input: nextNode.id, output: selectedId};
+      console.log(JSON.stringify(newlink));
+      schema.links.push(newlink);
+    }
+    
+    )
+    
+
+    
   }
 
 
