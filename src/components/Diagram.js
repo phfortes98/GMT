@@ -12,17 +12,6 @@ const initialSchema = createSchema({
   ]
 });
 
-const NewNode = ({ }) => (
-  <div className='button blue' style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }}>
-    <a>
-      <div role="button">
-        <label>Form: </label><input style={{ width: '25px', height: '12px' }} type='text'></input> <br></br>
-
-        <label>Func: </label><input style={{ width: '25px', height: '12px' }} type='text'></input>
-      </div>
-    </a>
-  </div>
-);
 
 
 
@@ -34,9 +23,8 @@ const UncontrolledDiagram = ({ sentence }) => {
   const [schema, { onChange, addNode, addLink, removeNode }] = useSchema(initialSchema);
 
   const [selected, setSelected] = useState([]);
-  
 
-  const clickNode = (id) => {
+  const toggleSelect = (id) => {
     console.log(`${id} clicked!`);
     if(selected.includes(id)){
       for(let i=0;i<selected.length;i++){
@@ -49,8 +37,8 @@ const UncontrolledDiagram = ({ sentence }) => {
     setSelected(selected);
   }
   const BaseNode = ({ content,id}) => (
-    <div className='button active' style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
-      <a onClick={()=>clickNode(id)}>
+    <div className='button active' onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
+      <a >
         <div role="button">
           {content}
         </div>
@@ -76,10 +64,31 @@ const UncontrolledDiagram = ({ sentence }) => {
 
 
   }, [sentence]);
+  const NewNode = ({id}) => (
+    <div className='button blue' style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={()=>toggleSelect(id)}>
+      <a>
+        <div role="button">
+          <label>Form: </label><input style={{ width: '25px', height: '12px' }} type='text'></input> <br></br>
+  
+          <label>Func: </label><input style={{ width: '25px', height: '12px' }} type='text'></input>
+        </div>
+      </a>
+    </div>
+  );
+  
 
-  const deleteNodeFromSchema = (id) => {
-    const nodeToRemove = schema.nodes.find(node => node.id === id);
+  const deleteNodeFromSchema = () => {
+    if(selected.length===0){
+      alert('You must select a node before pressing delete.')
+    }
+     else if(selected.length>1){
+      alert('You can only delete one node at a time!');
+    }
+    else{
+    const nodeToRemove = schema.nodes.find(node => node.id === selected[0]);
     removeNode(nodeToRemove);
+    }
+    
   };
 
   const findcoordinates=()=>{
@@ -131,9 +140,13 @@ const UncontrolledDiagram = ({ sentence }) => {
 
     return [resultX,resultY];
 
-  }
 
+  }
+ 
   const createNode = () => {
+    if(selected.length===0){
+      alert('You must select child nodes before creating a new node');
+    }
     let desiredcoordinates=findcoordinates();
     console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
     const nextNode = {
@@ -143,10 +156,8 @@ const UncontrolledDiagram = ({ sentence }) => {
         desiredcoordinates[0] ,
         desiredcoordinates[1],
       ],
+      parent:null,
       render: NewNode,
-      data: { onClick: deleteNodeFromSchema },
-      inputs: [{ id: `port-${Math.random()}` }],
-      outputs: [{ id: `port-${Math.random()}` }],
     };
 
     addNode(nextNode);
@@ -161,21 +172,27 @@ const UncontrolledDiagram = ({ sentence }) => {
       newlink={input: nextNode.id, output: selectedId};
       console.log(JSON.stringify(newlink));
       schema.links.push(newlink);
-    }
-    
-    )
-    
+      let fakelink=newlink;
+      schema.links.push(fakelink);
+      schema.links.pop();
+    })
+    //empty selected nodes array
+    selected.length=0;
+    setSelected(selected);
 
-    
   }
+  
+
+  
 
 
 
   return (
     <div style={{ height: '27rem' }}>
-      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onClick={createNode}>Add new node</Button>
-      <Button color="secondary" icon="minus" style={{ fontSize: '12px' }}>Delete Node</Button>
+      
       <Diagram style={{ height: '100%', overflow: 'scroll' }} schema={schema} onChange={onChange} />
+      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onClick={createNode}>Add new node</Button>
+      <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete Node</Button>
     </div>
   );
 };
