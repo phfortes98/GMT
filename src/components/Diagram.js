@@ -211,7 +211,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       
       <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema}/>
   
-      <Button color="primary" icon="plus" style={{ fontSize: '12px' }}  onClick={createNode}>Create node</Button>  
+      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onMouseOver={onChange} onClick={createNode}>Create node</Button>  
       <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete Node</Button>
     </div>
   );

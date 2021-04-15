@@ -55,7 +55,8 @@ label{
 
 .pallete-container{
     border-radius: 0px 4px 0px 0px;
-    background-color: rgba(17, 30, 115, 0.775);
+    background-color: #034d7e;
+    ;
     box-shadow: 0px 0px 15px 0 rgb(179, 179, 179);
 }
 .nav-pills{
