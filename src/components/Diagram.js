@@ -1,17 +1,18 @@
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import { Button } from 'beautiful-react-ui';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useReducer, createContext} from 'react';
 
 import './Diagram.css'
 
 import sentence from './Form';
-
+import { validateNode, validateNodes, validateSchema, validateLink, validateLinks, validatePort } from 'beautiful-react-diagrams';
 const initialSchema = createSchema({
   nodes: [
 
   ]
 });
 
+const DataContext=createContext();
 
 
 
@@ -20,9 +21,11 @@ const initialSchema = createSchema({
 const UncontrolledDiagram = ({ sentence }) => {
   // create diagrams schema
 
-  const [schema, { onChange, addNode, addLink, removeNode }] = useSchema(initialSchema);
+  const [schema, { onChange, addNode, connect, removeNode }] = useSchema(initialSchema);
 
   const [selected, setSelected] = useState([]);
+  
+  
 
   const toggleSelect = (id) => {
     console.log(`${id} clicked!`);
@@ -48,17 +51,19 @@ const UncontrolledDiagram = ({ sentence }) => {
   React.useEffect(() => {
     const wordNodes = sentence.split(" ");
 
-    wordNodes.forEach((word, index) => {
+    for(let i=0;i<wordNodes.length;i++){
       const node = {
-        id: `node-${index}`,
-        coordinates: [80 + 80 * index, 320],
-        content: word,
+        id: `node-${i}`,
+        coordinates: [80 + 80 * i, 320],
+        content: wordNodes[i],
         parentid: null,
         render: BaseNode,//()=><div style={{backgroundColor: 'lightblue',borderColor: 'black', width: '70px', borderRadius: '10px', padding: '8px'}} onClick={()=>clickNode(word)}>{word}</div>
       };
-      addNode(node);
-      console.log(`Node ${index} corresponds to the word "${word}"`)
-    });
+      if(schema.nodes.find(element => element.id === node.id)){}
+      else{
+      addNode(node);}
+     // console.log(`Node ${index} corresponds to the word "${word}"`)
+    }
 
     console.log(JSON.stringify(schema));
 
@@ -144,44 +149,50 @@ const UncontrolledDiagram = ({ sentence }) => {
   }
  
   const createNode = () => {
-    if(selected.length===0){
+    if (selected.length === 0) {
       alert('You must select child nodes before creating a new node');
     }
-    let desiredcoordinates=findcoordinates();
-    console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
-    const nextNode = {
-      id: `node-${schema.nodes.length + 1}`,
-      content: `Node ${schema.nodes.length + 1}`,
-      coordinates: [
-        desiredcoordinates[0] ,
-        desiredcoordinates[1],
-      ],
-      parent:null,
-      render: NewNode,
-    };
+    else {
+      
+      let desiredcoordinates = findcoordinates();
+      console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
+      const nextNode = {
+        id: `node-${schema.nodes.length + 1}`,
+        content: `Node ${schema.nodes.length + 1}`,
+        coordinates: [
+          desiredcoordinates[0],
+          desiredcoordinates[1],
+        ],
+        parent: null,
+        render: NewNode,
+      };
 
-    addNode(nextNode);
 
-    //let newlink={input: nextNode.id, output: 'node-0'};
-    console.log(`The nodes currently selected are ${selected}.`);
-    //console.log(JSON.stringify(newlink));
-    //schema.links.push(newlink);
-    let newlink={}
+      addNode(nextNode);
+      addLinks();
+
     
-    selected.forEach(function(selectedId){
-      newlink={input: nextNode.id, output: selectedId};
-      console.log(JSON.stringify(newlink));
-      schema.links.push(newlink);
-      let fakelink=newlink;
-      schema.links.push(fakelink);
-      schema.links.pop();
-    })
-    //empty selected nodes array
-    selected.length=0;
-    setSelected(selected);
+
+
+
+      //empty selected nodes array
+      selected.length = 0;
+      setSelected(selected);
+    }
 
   }
   
+  const addLinks=()=>{
+   // let newlink={}
+    selected.forEach(function(selectedId){
+      connect(`node-${schema.nodes.length + 1}`,selectedId)
+
+      //newlink={input: nextNode.id, output: selectedId};
+     // console.log(JSON.stringify(newlink));
+     // schema.links.push(newlink);
+    })
+
+  }
 
   
 
@@ -189,9 +200,11 @@ const UncontrolledDiagram = ({ sentence }) => {
 
   return (
     <div style={{ height: '27rem' }}>
+
       
-      <Diagram style={{ height: '100%', overflow: 'scroll' }} schema={schema} onChange={onChange} />
-      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onClick={createNode}>Add new node</Button>
+      <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema}/>
+  
+      <Button color="primary" icon="plus" style={{ fontSize: '12px' }}  onClick={createNode}>Create node</Button>  
       <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete Node</Button>
     </div>
   );
