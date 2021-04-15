@@ -2,7 +2,7 @@
     display: inline-block;
     *display: inline;
     zoom: 1;
-    padding: 6px 10px; 
+    padding: 6px 0px ; 
     margin: 0;
     cursor: pointer;
     border: 1px solid #bbb;
@@ -32,7 +32,9 @@
     -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
     -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
     box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
-    text-shadow: 0 1px 0 rgba(255,255,255, .9);}
+    text-shadow: 0 1px 0 rgba(255,255,255, .9);
+    font-size: 0.6rem;
+  }
 
 
     .button:hover{
@@ -228,4 +230,20 @@
       border-radius: 20%;
       background-color: 'red';
       text-align: center;
+  }
+
+  .button{
+    width: 70px;
+    text-align: left;
+    
+    
+
+  }
+  .blue{
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .uppernode{
+    padding-top: 0;
+    padding-bottom: 0;
   }

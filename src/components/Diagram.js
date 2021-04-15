@@ -5,17 +5,11 @@ import React, { useState, useEffect, useReducer, createContext} from 'react';
 import './Diagram.css'
 
 import sentence from './Form';
-import { validateNode, validateNodes, validateSchema, validateLink, validateLinks, validatePort } from 'beautiful-react-diagrams';
 const initialSchema = createSchema({
   nodes: [
 
   ]
 });
-
-const DataContext=createContext();
-
-
-
 
 
 const UncontrolledDiagram = ({ sentence }) => {
@@ -29,58 +23,64 @@ const UncontrolledDiagram = ({ sentence }) => {
 
   const toggleSelect = (id) => {
     console.log(`${id} clicked!`);
+    const nodeToToggle = schema.nodes.find(node => node.id === id);
     if(selected.includes(id)){
       for(let i=0;i<selected.length;i++){
         if(selected[i]===id){
           selected.splice(i,1);}
+         // document.getElementById(id).classList.remove("green");
+         if(nodeToToggle.level===2){
+           nodeToToggle.className="button blue"
+         }
+         else{
+          nodeToToggle.className="button";}
+
       }
     }
-    else{ selected.push(id)}
+    else{ 
+      selected.push(id);
+      
+      if(nodeToToggle.level===2){
+        nodeToToggle.className="button green uppernode"
+      }
+      else{
+       nodeToToggle.className="button green";}
+      
+      //document.getElementById(id).classList.add("green");
+      
+    }
     console.log(selected);
     setSelected(selected);
   }
-  const BaseNode = ({ content,id}) => (
-    <div className='button active' onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
-      <a >
-        <div role="button">
-          {content}
-        </div>
-      </a>
-    </div>
-  );
+
   React.useEffect(() => {
     const wordNodes = sentence.split(" ");
 
     for(let i=0;i<wordNodes.length;i++){
       const node = {
         id: `node-${i}`,
-        coordinates: [80 + 80 * i, 320],
+        coordinates: [80 + 80 * i, 340],
         content: wordNodes[i],
         parentid: null,
-        render: BaseNode,//()=><div style={{backgroundColor: 'lightblue',borderColor: 'black', width: '70px', borderRadius: '10px', padding: '8px'}} onClick={()=>clickNode(word)}>{word}</div>
+        className: 'button',
+        render: ({ content,id}) => (
+          <div id={id} onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
+              
+                {content}
+              
+          </div>
+        ),
       };
       if(schema.nodes.find(element => element.id === node.id)){}
       else{
       addNode(node);}
-     // console.log(`Node ${index} corresponds to the word "${word}"`)
+     
     }
 
     console.log(JSON.stringify(schema));
 
 
   }, [sentence]);
-  const NewNode = ({id}) => (
-    <div className='button blue' style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={()=>toggleSelect(id)}>
-      <a>
-        <div role="button">
-          <label>Form: </label><input style={{ width: '25px', height: '12px' }} type='text'></input> <br></br>
-  
-          <label>Func: </label><input style={{ width: '25px', height: '12px' }} type='text'></input>
-        </div>
-      </a>
-    </div>
-  );
-  
 
   const deleteNodeFromSchema = () => {
     if(selected.length===0){
@@ -141,7 +141,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       }
     })
     resultX=(minXCoordinate+maxXCoordinate)/2;
-    resultY=minYCoordinate-80;
+    resultY=minYCoordinate-65;
 
     return [resultX,resultY];
 
@@ -164,22 +164,33 @@ const UncontrolledDiagram = ({ sentence }) => {
           desiredcoordinates[1],
         ],
         parent: null,
-        render: NewNode,
+        level: 2,
+        className:'button blue',
+        render: ({id}) => (
+          <div id={id} style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={()=>toggleSelect(id)}>
+            <a>
+              <div role="button">
+                <label>Form: </label><input style={{ width: '25px', height: '12px' }} type='text'></input> <br></br>
+        
+                <label>Func: </label><input style={{ width: '25px', height: '12px' }} type='text'></input>
+              </div>
+            </a>
+          </div>
+        )
+        ,
       };
-
-
       addNode(nextNode);
       addLinks();
-
-    
-
-
+      emptySelected();
 
       //empty selected nodes array
-      selected.length = 0;
-      setSelected(selected);
+      //selected.length = 0;
+      //setSelected(selected);
     }
-
+  }
+  const emptySelected=()=>{
+    while(selected.length>0){
+    toggleSelect(selected[0]);}
   }
   
   const addLinks=()=>{
@@ -193,10 +204,6 @@ const UncontrolledDiagram = ({ sentence }) => {
     })
 
   }
-
-  
-
-
 
   return (
     <div style={{ height: '27rem' }}>
