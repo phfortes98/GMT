@@ -18,7 +18,24 @@ const UncontrolledDiagram = ({ sentence }) => {
   const [schema, { onChange, addNode, connect, removeNode }] = useSchema(initialSchema);
 
   const [selected, setSelected] = useState([]);
+
+  let textInput="";
+
   
+  const handleTextChange=(e)=>{
+    textInput=e.target.value;
+    
+  }
+  const handleFormSubmit=(id)=>{
+    
+    const nodeToChange = schema.nodes.find(node => node.id === id);
+    nodeToChange.form=textInput;
+  }
+  const handleFuncSubmit=(id)=>{
+    const nodefuncChange = schema.nodes.find(node => node.id === id);
+    nodefuncChange.function=textInput;
+  }
+
   
 
   const toggleSelect = (id) => {
@@ -37,6 +54,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
       }
     }
+    
     else{ 
       selected.push(id);
       
@@ -51,6 +69,11 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     console.log(selected);
     setSelected(selected);
+  }
+  const checkformstatus =(id)=>{
+    const nodeToToggle = schema.nodes.find(node => node.id === id);
+    if(nodeToToggle.form===null){return true;}
+    else{return false;}
   }
 
   React.useEffect(() => {
@@ -147,6 +170,43 @@ const UncontrolledDiagram = ({ sentence }) => {
 
 
   }
+  const conditionalFormDisplay=(id)=>{
+    const nodeToCheck=schema.nodes.find(node=>node.id=== id);
+    if(nodeToCheck.form===null){
+      return(
+        <div>
+          <label>Form: </label><input style={{ width: '25px', height: '12px' }} onChange={handleTextChange} type='text'></input>
+          <button className='buttonInputSubmit' onClick={()=>handleFormSubmit(id)}>+</button>
+        </div>
+      )
+    }
+    else{
+      return(
+        <div style={{display: 'flex',margin: '0'}}>
+          <label>Form: </label><p style={{color: 'yellow', marginLeft:'2px'}}>{nodeToCheck.form}</p>
+        </div>
+      )
+    }
+  }
+  const conditionalFuncDisplay=(id)=>{
+    const nodeToCheck=schema.nodes.find(node=>node.id=== id);
+    if(nodeToCheck.function===null){
+      return(
+        <div>
+          <label>Func: </label><input style={{ width: '25px', height: '12px' }} onChange={handleTextChange} type='text'></input>
+          <button className='buttonInputSubmit' onClick={()=>handleFuncSubmit(id)}>+</button>
+        </div>
+      )
+    }
+    else{
+      return(
+        <div style={{display: 'flex',margin: '0'}}>
+          <label>Func: </label><p style={{color: 'yellow', marginLeft:'2px'}}>{nodeToCheck.function}</p>
+        </div>
+      )
+    }
+  }
+  
  
   const createNode = () => {
     if (selected.length === 0) {
@@ -165,14 +225,17 @@ const UncontrolledDiagram = ({ sentence }) => {
         ],
         parent: null,
         level: 2,
+        form: null,
+        function: null,
         className:'button blue',
-        render: ({id}) => (
-          <div id={id} style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={()=>toggleSelect(id)}>
+        render: ({id,form}) => (
+          <div id={id} style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={() => toggleSelect(id)}>
             <a>
-              <div role="button">
-                <label>Form: </label><input style={{ width: '25px', height: '12px' }} type='text'></input> <br></br>
-        
-                <label>Func: </label><input style={{ width: '25px', height: '12px' }} type='text'></input>
+              {conditionalFormDisplay(id)}
+
+            
+              <div>
+              {conditionalFuncDisplay(id)}
               </div>
             </a>
           </div>
@@ -209,7 +272,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     <div style={{ height: '27rem' }}>
 
       
-      <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema}/>
+      <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseOver={onChange} schema={schema}/>
   
       <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onMouseOver={onChange} onClick={createNode}>Create node</Button>  
       <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete Node</Button>

@@ -248,3 +248,24 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+  .buttonInputSubmit{
+
+    border-style: none;
+    
+    height: 13px;
+    width: 13px;
+    font-size: 8px;
+    font-weight:600;
+    color: white;
+    background-color: #3c14b3; 
+    border-radius: 3px;
+    padding: 3px 5px 3px 5px;
+    margin-left: 2px;
+
+  }
+
+  .buttonInputSubmit:hover{
+    background-color: blue;
+
+  }
+
