@@ -97,6 +97,11 @@ a:onhover{
 .workspace{
     box-shadow: 15px 0px 15px 0 rgb(179, 179, 179);
 }
-
-
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+.fullheight{
+    height:100%;
+}
 

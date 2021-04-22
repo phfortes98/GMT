@@ -12,12 +12,12 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-ReactDOM.render(
-  <React.StrictMode>
-    < ControlButtons />
-  </React.StrictMode>,
-  document.getElementById('footer-buttons')
-);
+// ReactDOM.render(
+//   <React.StrictMode>
+//     < ControlButtons />
+//   </React.StrictMode>,
+//   document.getElementById('footer-buttons')
+// );
 
 
 // If you want to start measuring performance in your app, pass a function

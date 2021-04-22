@@ -70,21 +70,18 @@ const UncontrolledDiagram = ({ sentence }) => {
     console.log(selected);
     setSelected(selected);
   }
-  const checkformstatus =(id)=>{
-    const nodeToToggle = schema.nodes.find(node => node.id === id);
-    if(nodeToToggle.form===null){return true;}
-    else{return false;}
-  }
+  
 
   React.useEffect(() => {
     const wordNodes = sentence.split(" ");
+    console.log(wordNodes);
 
     for(let i=0;i<wordNodes.length;i++){
       const node = {
         id: `node-${i}`,
         coordinates: [80 + 80 * i, 340],
         content: wordNodes[i],
-        parentid: null,
+        parent: null,
         className: 'button',
         render: ({ content,id}) => (
           <div id={id} onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
@@ -113,8 +110,40 @@ const UncontrolledDiagram = ({ sentence }) => {
       alert('You can only delete one node at a time!');
     }
     else{
-    const nodeToRemove = schema.nodes.find(node => node.id === selected[0]);
-    removeNode(nodeToRemove);
+
+      const nodeToRemove = schema.nodes.find(node => node.id === selected[0]);
+
+      //Remove all links
+      while (schema.links.find(link => link.input === selected[0])) {
+        const linkToRemove = schema.links.find(link => link.input == selected[0]);
+        let linkindex = schema.links.indexOf(linkToRemove);
+        schema.links.splice(linkindex, 1);
+      }
+      while (schema.links.find(link => link.output === selected[0])) {
+        const linkToRemovetwo = schema.links.find(link => link.output == selected[0]);
+        let linkindextwo = schema.links.indexOf(linkToRemovetwo);
+        schema.links.splice(linkindextwo, 1);
+      }
+
+      // const linkToRemove = schema.links.find(link => link.input === nodeToRemove.id);
+      // while (schema.links.includes(linkToRemove)) {
+      //   for (let i = 0; i < schema.links.length; i++) {
+      //     if (schema.links[i] === linkToRemove) {
+      //       schema.links.splice(i, 1);
+      //     }
+      //   }
+      // }
+      // const linkoutToRemove = schema.links.find(link => link.output === nodeToRemove.id);
+      // while (schema.links.includes(linkoutToRemove)) {
+      //   for (let a = 0; a < schema.links.length; a++) {
+      //     if (schema.links[a] === linkoutToRemove) {
+      //       schema.links.splice(a, 1);
+      //     }
+      //   }
+      // }
+
+      removeNode(nodeToRemove);
+      emptySelected();
     }
     
   };
@@ -182,7 +211,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     else{
       return(
-        <div style={{display: 'flex',margin: '0'}}>
+        <div style={{display: 'flex',margin: '0', padding: '0'}}>
           <label>Form: </label><p style={{color: 'yellow', marginLeft:'2px'}}>{nodeToCheck.form}</p>
         </div>
       )
@@ -192,7 +221,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     const nodeToCheck=schema.nodes.find(node=>node.id=== id);
     if(nodeToCheck.function===null){
       return(
-        <div>
+        <div style={{marginTop: '-4px'}}>
           <label>Func: </label><input style={{ width: '25px', height: '12px' }} onChange={handleTextChange} type='text'></input>
           <button className='buttonInputSubmit' onClick={()=>handleFuncSubmit(id)}>+</button>
         </div>
@@ -200,7 +229,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     else{
       return(
-        <div style={{display: 'flex',margin: '0'}}>
+        <div style={{display: 'flex',marginTop: '-5px'}}>
           <label>Func: </label><p style={{color: 'yellow', marginLeft:'2px'}}>{nodeToCheck.function}</p>
         </div>
       )
@@ -244,11 +273,19 @@ const UncontrolledDiagram = ({ sentence }) => {
       };
       addNode(nextNode);
       addLinks();
+      updateParents(nextNode.id)
       emptySelected();
 
       //empty selected nodes array
       //selected.length = 0;
       //setSelected(selected);
+    }
+  }
+  const updateParents=(nextNodeId)=>{
+    for (let a=0;a<selected.length;a++){
+      const nodeToUpdate= schema.nodes.find(node => node.id === selected[a]);
+      nodeToUpdate.parent=nextNodeId;
+      console.log(`${selected[a]}'s parent was updated to ${nextNodeId}`);
     }
   }
   const emptySelected=()=>{
@@ -271,11 +308,11 @@ const UncontrolledDiagram = ({ sentence }) => {
   return (
     <div style={{ height: '27rem' }}>
 
+      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onMouseLeave={onChange} onClick={createNode}>Create</Button>
+      <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
+      <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema} />
+
       
-      <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseOver={onChange} schema={schema}/>
-  
-      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onMouseOver={onChange} onClick={createNode}>Create node</Button>  
-      <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete Node</Button>
     </div>
   );
 };
