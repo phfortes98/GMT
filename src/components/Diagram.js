@@ -4,13 +4,11 @@ import React, { useState, useEffect, useReducer, createContext} from 'react';
 
 import './Diagram.css'
 
-import sentence from './Form';
 const initialSchema = createSchema({
   nodes: [
 
   ]
 });
-
 
 const UncontrolledDiagram = ({ sentence }) => {
   // create diagrams schema
@@ -83,7 +81,7 @@ const UncontrolledDiagram = ({ sentence }) => {
         content: wordNodes[i],
         level: 1,
         parent: null,
-        className: 'button',
+        className: selected.includes(`node-${i}`)?'button green':'button',
         render: ({id,content}) => (
           <div onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
               
@@ -332,8 +330,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       
       <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema} />
       <Button color="primary"  style={{ fontSize: '12px' }} onMouseHover={onChange} onClick={createNode}>Create</Button>
-      <Button color="secondary" className="red" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
-
+      <Button color="secondary" className="red" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button> 
       
     </div>
   );
