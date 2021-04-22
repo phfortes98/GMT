@@ -81,17 +81,18 @@ const UncontrolledDiagram = ({ sentence }) => {
         id: `node-${i}`,
         coordinates: [80 + 80 * i, 340],
         content: wordNodes[i],
+        level: 1,
         parent: null,
         className: 'button',
-        render: ({ content,id}) => (
-          <div id={id} onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
+        render: ({id,content}) => (
+          <div onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
               
                 {content}
               
           </div>
         ),
       };
-      if(schema.nodes.find(element => element.id === node.id)){}
+      if(schema.nodes.find(element => element.id === node.id)){ }
       else{
       addNode(node);}
      
@@ -112,6 +113,10 @@ const UncontrolledDiagram = ({ sentence }) => {
     else{
 
       const nodeToRemove = schema.nodes.find(node => node.id === selected[0]);
+      if(nodeToRemove.level===1){
+        alert("You cannot delete a base node!");
+        return;
+      }
 
       //Remove all links
       while (schema.links.find(link => link.input === selected[0])) {
@@ -242,6 +247,21 @@ const UncontrolledDiagram = ({ sentence }) => {
       alert('You must select child nodes before creating a new node');
     }
     else {
+      let count=1;
+      for(let i=0;i<selected.length;i++){
+        const nodeSelected=schema.nodes.find(node=>node.id===selected[i]);
+        if(nodeSelected.parent!=null){
+          const nodeToUpdate=schema.nodes.find(node=>node.id===nodeSelected.parent);
+          if(count===1){
+            nodeToUpdate.coordinates[1]-=65; 
+            count--;
+          }
+          const linkToDelete=schema.links.find(link=>link.input===nodeToUpdate.id && link.output===selected[i]);
+          
+        }
+        
+
+      }
       
       let desiredcoordinates = findcoordinates();
       console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
@@ -275,6 +295,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       addLinks();
       updateParents(nextNode.id)
       emptySelected();
+      console.log(JSON.stringify(schema));
 
       //empty selected nodes array
       //selected.length = 0;
@@ -308,9 +329,10 @@ const UncontrolledDiagram = ({ sentence }) => {
   return (
     <div style={{ height: '27rem' }}>
 
-      <Button color="primary" icon="plus" style={{ fontSize: '12px' }} onMouseLeave={onChange} onClick={createNode}>Create</Button>
-      <Button color="secondary" icon="minus" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
+      
       <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema} />
+      <Button color="primary"  style={{ fontSize: '12px' }} onMouseHover={onChange} onClick={createNode}>Create</Button>
+      <Button color="secondary" className="red" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
 
       
     </div>
