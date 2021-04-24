@@ -105,7 +105,7 @@
               View
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Toggle Dock Pallete</a>
+              <a class="dropdown-item" onclick="toggleDockPallet()"href="#">Toggle Dock Pallete</a>
             </div>
           </li>
           <a class="nav-link" href="#">
@@ -136,201 +136,140 @@
     <div class="row canvas-container">
 
       <!-- Pallete-->
+      
 
-      <div class="pallete-container col-md-3 col-lg-2 d-none d-md-block" style='height: 32rem'>
-        <header class="row justify-content-center pallete-header">Dock Pallete</header>
-
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="pills-function-tab" data-toggle="pill" href="#pills-function" role="tab"
-              aria-controls="pills-function" aria-selected="true">Functions</a>
-          </li>
-          <li class="nav-item" role="presentation">
-            <a class="nav-link" id="pills-form-tab" data-toggle="pill" href="#pills-form" role="tab"
-              aria-controls="pills-form" aria-selected="false">Forms</a>
-          </li>
-          <li class="nav-item" role="presentation">
-            <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab"
-              aria-controls="pills-all" aria-selected="false">All</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-          <div class="tab-pane fade show active" id="pills-function" role="tabpanel" aria-labelledby="pills-function-tab">
-            <div id="box2" class="black-box">
-              <ul>
-                <li>AdjComp</li>
-                <li>Advbl</li>
-                <li>AdvComp</li>
-                <li>Adverbial Phrase</li>
-                <li>Adtv</li>
-                <li>Central Determiner</li>
-                <li>PrepComp</li>
-                <li>Coord</li>
-                <li>Declaration</li>
-                <li>Det</li>
-                <li>DO</li>
-                <li>GenPast</li>
-                <li>IO</li>
-                <li>Modal</li>
-                <li>Modif</li>
-                <li>Negator</li>
-                <li>OC</li>
-                <li>Operator</li>
-                <li>Perf</li>
-                <li>Post-Adjunct</li>
-                <li>Pre-Adjunct</li>
-                <li>Pre-Determiner</li>
-                <li>Pred</li>
-                <li>S</li>
-                <li>Subj</li>
-                <li>SC</li>
-              </ul>
+      
+        <div id="dock-pallet" class="pallete-container col-md-3 col-lg-2" style='height: 32rem'>
+          <header class="row justify-content-center pallete-header">Dock Pallete</header>
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="pills-function-tab" data-toggle="pill" href="#pills-function" role="tab"
+                aria-controls="pills-function" aria-selected="true">Functions</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="pills-form-tab" data-toggle="pill" href="#pills-form" role="tab"
+                aria-controls="pills-form" aria-selected="false">Forms</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab"
+                aria-controls="pills-all" aria-selected="false">All</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-function" role="tabpanel" aria-labelledby="pills-function-tab">
+              <div id="box2" class="black-box">
+                <ul>
+                  <li>AdjComp</li>
+                  <li>Advbl</li>
+                  <li>AdvComp</li>
+                  <li>Adverbial Phrase</li>
+                  <li>Adtv</li>
+                  <li>Central Determiner</li>
+                  <li>PrepComp</li>
+                  <li>Coord</li>
+                  <li>Declaration</li>
+                  <li>Det</li>
+                  <li>DO</li>
+                  <li>GenPast</li>
+                  <li>IO</li>
+                  <li>Modal</li>
+                  <li>Modif</li>
+                  <li>Negator</li>
+                  <li>OC</li>
+                  <li>Operator</li>
+                  <li>Perf</li>
+                  <li>Post-Adjunct</li>
+                  <li>Pre-Adjunct</li>
+                  <li>Pre-Determiner</li>
+                  <li>Pred</li>
+                  <li>S</li>
+                  <li>Subj</li>
+                  <li>SC</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-form" role="tabpanel" aria-labelledby="pills-form-tab">
+              <div id="box-1" class="black-box">
+                <ul>
+                  <li>AdjPhr</li>
+                  <li>Adj</li>
+                  <li>Adv</li>
+                  <li>AdvPhr</li>
+                  <li>Art</li>
+                  <li>Aux</li>
+                  <li>Czr</li>
+                  <li>Dem</li>
+                  <li>DetPhr</li>
+                  <li>N</li>
+                  <li>NP</li>
+                  <li>PredPhr</li>
+                  <li>Prep</li>
+                  <li>PrepPhr</li>
+                  <li>Pron</li>
+                  <li>Quantifier</li>
+                  <li>V</li>
+                  <li>VP</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+              <div id="box-1" class="black-box">
+                <ul>
+                  <li>Adj</li>
+                  <li>AdjPhr</li>
+                  <li>AdjComp</li>
+                  <li>Adv</li>
+                  <li>Advbl </li>
+                  <li>AdvComp</li>
+                  <li>Adverbial Phrase</li>
+                  <li>AdvPhr</li>
+                  <li>Agtv</li>
+                  <li>Art </li>
+                  <li>Aux </li>
+                  <li>Czr</li>
+                  <li>Central Determiner</li>
+                  <li>Coord</li>
+                  <li>PrepComp</li>
+                  <li>Declaration</li>
+                  <li>Dem</li>
+                  <li>Det</li>
+                  <li>DetPhr</li>
+                  <li>DO</li>
+                  <li>GenPast</li>
+                  <li>IO</li>
+                  <li>Modal</li>
+                  <li>Modif</li>
+                  <li>N</li>
+                  <li>Negator</li>
+                  <li>NP</li>
+                  <li>OC</li>
+                  <li>Operator</li>
+                  <li>Perf</li>
+                  <li>Post-Adjunct</li>
+                  <li>PredPhr</li>
+                  <li>Prep</li>
+                  <li>PrepPhr</li>
+                  <li>Pre-Adjunct</li>
+                  <li>Pre-Determiner</li>
+                  <li>Pred</li>
+                  <li>Pron </li>
+                  <li>Quantifier </li>
+                  <li>V </li>
+                  <li>VP </li>
+                  <li>S </li>
+                  <li>Subj </li>
+                  <li>SC</li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="pills-form" role="tabpanel" aria-labelledby="pills-form-tab">
-            <div id="box-1" class="black-box">
-              <ul>
-                <li>AdjPhr</li>
-                <li>Adj</li>
-                <li>Adv</li>
-                <li>AdvPhr</li>
-                <li>Art</li>
-                <li>Aux</li>
-                <li>Czr</li>
-                <li>Dem</li>
-                <li>DetPhr</li>
-                <li>N</li>
-                <li>NP</li>
-                <li>PredPhr</li>
-                <li>Prep</li>
-                <li>PrepPhr</li>
-                <li>Pron</li>
-                <li>Quantifier</li>
-                <li>V</li>
-                <li>VP</li>
-              </ul>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-            <div id="box-1" class="black-box">
-              <ul>
-                <li>Adj</li>
-                <li>AdjPhr</li>
-                <li>AdjComp</li>
-                <li>Adv</li>
-                <li>Advbl </li>
-                <li>AdvComp</li>
-                <li>Adverbial Phrase</li>
-                <li>AdvPhr</li>
-                <li>Agtv</li>
-                <li>Art </li>
-                <li>Aux </li>
-                <li>Czr</li>
-                <li>Central Determiner</li>
-                <li>Coord</li>
-                <li>PrepComp</li>
-                <li>Declaration</li>
-                <li>Dem</li>
-                <li>Det</li>
-                <li>DetPhr</li>
-                <li>DO</li>
-                <li>GenPast</li>
-                <li>IO</li>
-                <li>Modal</li>
-                <li>Modif</li>
-                <li>N</li>
-                <li>Negator</li>
-                <li>NP</li>
-                <li>OC</li>
-                <li>Operator</li>
-                <li>Perf</li>
-                <li>Post-Adjunct</li>
-                <li>PredPhr</li>
-                <li>Prep</li>
-                <li>PrepPhr</li>
-                <li>Pre-Adjunct</li>
-                <li>Pre-Determiner</li>
-                <li>Pred</li>
-                <li>Pron </li>
-                <li>Quantifier </li>
-                <li>V </li>
-                <li>VP </li>
-                <li>S </li>
-                <li>Subj </li>
-                <li>SC</li>
-              </ul>
-            </div>
-          </div>
-
+        
         </div>
-
-        <!-----------------------------Pill Content-------------------------------->
-        <!-- <div class="tab-content" id="pills-tabContent">
-          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-forms-tab">
-            
-
-            <div id="box-1" class="black-box">
-              <ul>
-                <li>form 1</li>
-                <li>form 2</li>
-                <li>form 3</li>
-                <li>form 4</li>
-                <li>form 5</li>
-                <li>form 6</li>
-                <li>form 7</li>
-                <li>form 8</li>
-                <li>form 9</li>
-              </ul>
-            </div>
-
-          </div>
-          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-functions-tab">
-            <div id="box2" class="black-box">
-              <ul>
-                <li>function 1</li>
-                <li>function 2</li>
-                <li>function 3</li>
-                <li>function 4</li>
-                <li>function 5</li>
-                <li>function 6</li>
-                <li>function 7</li>
-                <li>function 8</li>
-                <li>function 9</li>
-              </ul>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-both-tab">
-            <div id="box-3" class="black-box">
-              <ul>
-                <li>form 1</li>
-                <li>form 2</li>
-                <li>form 3</li>
-                <li>form 4</li>
-                <li>form 5</li>
-                <li>form 6</li>
-                <li>form 7</li>
-                <li>form 8</li>
-                <li>form 9</li>
-                <li>function 1</li>
-                <li>function 2</li>
-                <li>function 3</li>
-                <li>function 4</li>
-                <li>function 5</li>
-                <li>function 6</li>
-                <li>function 7</li>
-                <li>function 8</li>
-                <li>function 9</li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
-
-
-      </div>
+      
 
       <!-- Canvas-->
 
-      <div class="workspace col-lg-10 col-md-9">
+      <div id="workspace" class="workspace col-lg-10 col-md-9">
         <!-- Tab-->
         <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
@@ -382,6 +321,20 @@
       alert("The input sentence is:" + sentence);
     }
 
+  </script>
+  <script>
+    function toggleDockPallet() {
+      var x = document.getElementById("dock-pallet");
+      var y=document.getElementById("workspace");
+      if (x.style.display === "none") {
+      x.style.display = "block";
+      y.className="workspace col-lg-10 col-md-9";
+      } else {
+           x.style.display = "none";
+           y.className="workspace col-12"
+           
+          }
+    }
   </script>
   <script>
     function printDiagram() {

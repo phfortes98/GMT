@@ -46,6 +46,12 @@ body{
 
 
 }
+@media (max-width: 576px) {
+    #dock-pallet{
+        display: none;
+    }
+}
+
 .navbar li{
     display: inline-block;
 }
