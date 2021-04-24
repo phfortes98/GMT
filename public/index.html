@@ -85,16 +85,16 @@
 
 
   <!-- Navbar-->
-  <nav class="top-navigation navbar navbar-expand-lg navbar-light" style="background-color: #2e206d;">
+  <nav class="top-navigation navbar navbar-expand-sm navbar-light" style="background-color: #2e206d;">
 
     <div>
-      <a class="navbar-brand" href="#"><img class="workspace-logo" src="images/Logo_White.png" alt="GMT Logo Black"></a>
+      <a class="navbar-brand" href="#"><img class="workspace-logo"  style="width: 32px; height: auto" src="images/Logo_small_white.png" alt="GMT Logo Black"></a>
     </div>
 
     <div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <img src="images/burgerMenu.png" style="width: 25px; height: auto;"/>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
@@ -106,9 +106,6 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Toggle Dock Pallete</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
           <a class="nav-link" href="#">
@@ -116,11 +113,6 @@
             <button type="button" class="btn btn-primary btn-sm" onclick="printDiagram()">
               <img src="images/print_icon.png" style="width: 16px; height: auto" alt="GMT print icon">
             </button>
-          </a>
-          <a class="nav-link" href="#">
-            <label>Save</label>
-            <button type="button" class="btn btn-success btn-sm"><img src="images/save-icon.png"
-                style="width: 16px; height: auto" alt="GMT print icon"></button>
           </a>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -149,25 +141,135 @@
         <header class="row justify-content-center pallete-header">Dock Pallete</header>
 
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-          <li class="mypillnav-item" role="presentation">
-            <a class="nav-link active" id="pills-forms-tab" data-toggle="pill" href="#pills-home" role="tab"
-              aria-controls="pills-home" aria-selected="true">Forms</a>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pills-function-tab" data-toggle="pill" href="#pills-function" role="tab"
+              aria-controls="pills-function" aria-selected="true">Functions</a>
           </li>
-          <li class="mypillnav-item" role="presentation">
-            <a class="nav-link" id="pills-functions-tab" data-toggle="pill" href="#pills-profile" role="tab"
-              aria-controls="pills-profile" aria-selected="false">Functions</a>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-form-tab" data-toggle="pill" href="#pills-form" role="tab"
+              aria-controls="pills-form" aria-selected="false">Forms</a>
           </li>
-          <li class="mypillnav-item" role="presentation">
-            <a class="nav-link" id="pills-both-tab" data-toggle="pill" href="#pills-contact" role="tab"
-              aria-controls="pills-contact" aria-selected="false">All</a>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab"
+              aria-controls="pills-all" aria-selected="false">All</a>
           </li>
         </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-function" role="tabpanel" aria-labelledby="pills-function-tab">
+            <div id="box2" class="black-box">
+              <ul>
+                <li>AdjComp</li>
+                <li>Advbl</li>
+                <li>AdvComp</li>
+                <li>Adverbial Phrase</li>
+                <li>Adtv</li>
+                <li>Central Determiner</li>
+                <li>PrepComp</li>
+                <li>Coord</li>
+                <li>Declaration</li>
+                <li>Det</li>
+                <li>DO</li>
+                <li>GenPast</li>
+                <li>IO</li>
+                <li>Modal</li>
+                <li>Modif</li>
+                <li>Negator</li>
+                <li>OC</li>
+                <li>Operator</li>
+                <li>Perf</li>
+                <li>Post-Adjunct</li>
+                <li>Pre-Adjunct</li>
+                <li>Pre-Determiner</li>
+                <li>Pred</li>
+                <li>S</li>
+                <li>Subj</li>
+                <li>SC</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="pills-form" role="tabpanel" aria-labelledby="pills-form-tab">
+            <div id="box-1" class="black-box">
+              <ul>
+                <li>AdjPhr</li>
+                <li>Adj</li>
+                <li>Adv</li>
+                <li>AdvPhr</li>
+                <li>Art</li>
+                <li>Aux</li>
+                <li>Czr</li>
+                <li>Dem</li>
+                <li>DetPhr</li>
+                <li>N</li>
+                <li>NP</li>
+                <li>PredPhr</li>
+                <li>Prep</li>
+                <li>PrepPhr</li>
+                <li>Pron</li>
+                <li>Quantifier</li>
+                <li>V</li>
+                <li>VP</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+            <div id="box-1" class="black-box">
+              <ul>
+                <li>Adj</li>
+                <li>AdjPhr</li>
+                <li>AdjComp</li>
+                <li>Adv</li>
+                <li>Advbl </li>
+                <li>AdvComp</li>
+                <li>Adverbial Phrase</li>
+                <li>AdvPhr</li>
+                <li>Agtv</li>
+                <li>Art </li>
+                <li>Aux </li>
+                <li>Czr</li>
+                <li>Central Determiner</li>
+                <li>Coord</li>
+                <li>PrepComp</li>
+                <li>Declaration</li>
+                <li>Dem</li>
+                <li>Det</li>
+                <li>DetPhr</li>
+                <li>DO</li>
+                <li>GenPast</li>
+                <li>IO</li>
+                <li>Modal</li>
+                <li>Modif</li>
+                <li>N</li>
+                <li>Negator</li>
+                <li>NP</li>
+                <li>OC</li>
+                <li>Operator</li>
+                <li>Perf</li>
+                <li>Post-Adjunct</li>
+                <li>PredPhr</li>
+                <li>Prep</li>
+                <li>PrepPhr</li>
+                <li>Pre-Adjunct</li>
+                <li>Pre-Determiner</li>
+                <li>Pred</li>
+                <li>Pron </li>
+                <li>Quantifier </li>
+                <li>V </li>
+                <li>VP </li>
+                <li>S </li>
+                <li>Subj </li>
+                <li>SC</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
 
         <!-----------------------------Pill Content-------------------------------->
-        <div class="tab-content" id="pills-tabContent">
+        <!-- <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-forms-tab">
+            
 
-            <div class="black-box">
+            <div id="box-1" class="black-box">
               <ul>
                 <li>form 1</li>
                 <li>form 2</li>
@@ -183,7 +285,7 @@
 
           </div>
           <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-functions-tab">
-            <div class="black-box">
+            <div id="box2" class="black-box">
               <ul>
                 <li>function 1</li>
                 <li>function 2</li>
@@ -198,7 +300,7 @@
             </div>
           </div>
           <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-both-tab">
-            <div class="black-box">
+            <div id="box-3" class="black-box">
               <ul>
                 <li>form 1</li>
                 <li>form 2</li>
@@ -221,7 +323,7 @@
               </ul>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
       </div>
@@ -230,12 +332,12 @@
 
       <div class="workspace col-lg-10 col-md-9">
         <!-- Tab-->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
               aria-selected="true">Design 1</a>
           </li>
-        </ul>
+        </ul> -->
 
         <div class="canvas" id="root"></div>
       </div>

@@ -110,12 +110,14 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
      else if(selected.length>1){
       alert('You can only delete one node at a time!');
+      emptySelected();
     }
     else{
 
       const nodeToRemove = schema.nodes.find(node => node.id === selected[0]);
       if(nodeToRemove.level===1){
         alert("You cannot delete a base node!");
+        emptySelected();
         return;
       }
 
@@ -164,7 +166,8 @@ const UncontrolledDiagram = ({ sentence }) => {
       let linkindextwo = schema.links.indexOf(linkToRemovetwo);
       schema.links.splice(linkindextwo, 1);
     }
-    removeNode(nodeToId);
+    removeNode(nodeId);
+    emptySelected();
   }
 
   const findcoordinates=()=>{
@@ -487,10 +490,21 @@ const UncontrolledDiagram = ({ sentence }) => {
   return (
     <div style={{ height: '27rem' }}>
 
+      <div style={{ backgroundColor: '#240090', textAlign: 'center', borderRadius: '4px 4px 0px 0px', height: '32px'}}>
+        <label>Create</label>
+      <Button color="primary"  style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px' , height: '22px'}} onMouseLeave={updateLink} onMouseOver={onChange} onClick={createNode}>
+        <img style={{width: '16px', height: 'auto'}} src='images/mknode-icon.png'></img></Button>
+        <label>Delete</label>
+      <Button color="danger" className="red" style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>
+        <img style={{width: '16px', height: 'auto'}} src='images/delete-icon.png'></img></Button>
+        <label>Save</label>
+      <Button  className="red" style={{ backgroundColor: '#57a957',fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>
+        <img style={{width: '16px', height: 'auto'}} src='images/save-icon.png'></img></Button>
+      </div>
+        
       
       <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema} />
-      <Button color="primary"  style={{ fontSize: '12px' }} onMouseLeave={updateLink} onMouseOver={onChange} onClick={createNode}>Create</Button>
-      <Button color="secondary" className="red" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
+      
 
       
     </div>
