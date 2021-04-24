@@ -153,7 +153,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     
   };
-  const removeAllLinksToNode=(nodeId)=>{
+  const deleteNodeById=(nodeId)=>{
     while (schema.links.find(link => link.input === nodeId)) {
       const linkToRemove = schema.links.find(link => link.input == nodeId);
       let linkindex = schema.links.indexOf(linkToRemove);
@@ -164,6 +164,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       let linkindextwo = schema.links.indexOf(linkToRemovetwo);
       schema.links.splice(linkindextwo, 1);
     }
+    removeNode(nodeToId);
   }
 
   const findcoordinates=()=>{
