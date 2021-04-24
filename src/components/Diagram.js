@@ -18,6 +18,7 @@ const UncontrolledDiagram = ({ sentence }) => {
   const [schema, { onChange, addNode, connect, removeNode }] = useSchema(initialSchema);
 
   const [selected, setSelected] = useState([]);
+  const [linksToBeUpdated,setLinksToBeUpdated]=useState([]);
 
   let textInput="";
 
@@ -39,7 +40,7 @@ const UncontrolledDiagram = ({ sentence }) => {
   
 
   const toggleSelect = (id) => {
-    console.log(`${id} clicked!`);
+    //console.log(`${id} toggled!`);
     const nodeToToggle = schema.nodes.find(node => node.id === id);
     if(selected.includes(id)){
       for(let i=0;i<selected.length;i++){
@@ -67,7 +68,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       //document.getElementById(id).classList.add("green");
       
     }
-    console.log(selected);
+   // console.log(selected);
     setSelected(selected);
   }
   
@@ -92,13 +93,13 @@ const UncontrolledDiagram = ({ sentence }) => {
           </div>
         ),
       };
-      if(schema.nodes.find(element => element.id === node.id)){ }
-      else{
+      if(schema.nodes.length<=wordNodes.length){
       addNode(node);}
+      
      
     }
 
-    console.log(JSON.stringify(schema));
+   // console.log(JSON.stringify(schema));
 
 
   }, [sentence]);
@@ -152,6 +153,18 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     
   };
+  const removeAllLinksToNode=(nodeId)=>{
+    while (schema.links.find(link => link.input === nodeId)) {
+      const linkToRemove = schema.links.find(link => link.input == nodeId);
+      let linkindex = schema.links.indexOf(linkToRemove);
+      schema.links.splice(linkindex, 1);
+    }
+    while (schema.links.find(link => link.output === nodeId)) {
+      const linkToRemovetwo = schema.links.find(link => link.output == nodeId);
+      let linkindextwo = schema.links.indexOf(linkToRemovetwo);
+      schema.links.splice(linkindextwo, 1);
+    }
+  }
 
   const findcoordinates=()=>{
     let maxXCoordinate=0;
@@ -165,40 +178,42 @@ const UncontrolledDiagram = ({ sentence }) => {
       const fullnodeinfo=schema.nodes.find(node=>node.id===selectedNodeId);
       
       if(firstnode){
-        console.log(`The first node has coordinates: (${fullnodeinfo.coordinates[0]},${fullnodeinfo.coordinates[1]})`)
+       // console.log(`The first node has coordinates: (${fullnodeinfo.coordinates[0]},${fullnodeinfo.coordinates[1]})`)
         maxXCoordinate=fullnodeinfo.coordinates[0];
         minXCoordinate=fullnodeinfo.coordinates[0];
         minYCoordinate=fullnodeinfo.coordinates[1];
-        console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        //console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
         firstnode=false;
       }
       else if(fullnodeinfo.coordinates[0]<maxXCoordinate){
         if(fullnodeinfo.coordinates[0]<minXCoordinate){
           minXCoordinate=fullnodeinfo.coordinates[0];
-          console.log(`Min X coordinate was updated to: ${minXCoordinate}`);
-          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+          //console.log(`Min X coordinate was updated to: ${minXCoordinate}`);
+         // console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
 
         }
 
         if(fullnodeinfo.coordinates[1]<minYCoordinate){
           minYCoordinate=fullnodeinfo.coordinates[1];
-          console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
-          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+         // console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
+         // console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
         }
       }
       else{
         maxXCoordinate=fullnodeinfo.coordinates[0];
-        console.log(`Max X coordinate was updated to: ${maxXCoordinate}`);
-          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+      //  console.log(`Max X coordinate was updated to: ${maxXCoordinate}`);
+         // console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
         if(fullnodeinfo.coordinates[1]<minYCoordinate){
           minYCoordinate=fullnodeinfo.coordinates[1];
-          console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
-          console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
+        //  console.log(`Min Y coordinate was updated to: ${minYCoordinate}`);
+        //  console.log(`minx: ${minXCoordinate}, maxX:${maxXCoordinate},minY: ${minYCoordinate}`)
         }
       }
     })
     resultX=(minXCoordinate+maxXCoordinate)/2;
     resultY=minYCoordinate-65;
+
+   // console.log(`The desired coordinates for the new node are (${resultX},${resultY}`);
 
     return [resultX,resultY];
 
@@ -240,30 +255,84 @@ const UncontrolledDiagram = ({ sentence }) => {
       )
     }
   }
+  const checkForSameParent=()=>{
+     //CHECK IF SELECTED NODES HAVE THE SAME PARENT
+     let count=1;
+     let listOfParents=[];
+     let childrenWithSameParent=[];
+     for(let i=0;i<selected.length;i++){
+       const nodeSelected=schema.nodes.find(node=>node.id===selected[i]);  //retrieve each selected node object
+
+       // find out if all selected nodes have the same parent 
+
+       if(count===1 && nodeSelected.parent!=null){
+         listOfParents[0]=nodeSelected.parent;
+         childrenWithSameParent.push(selected[i]);
+         count--;
+       }
+       else if(count===0 && nodeSelected.parent!=null){
+         if(nodeSelected.parent!=listOfParents[0]){
+           return false;
+         }
+         childrenWithSameParent.push(selected[i]);
+       }
+       
+     }
+
+     if(listOfParents.length===1){
+       //console.log("The children with same parent are:");
+       console.log(childrenWithSameParent);
+     
+     return( {parent: listOfParents[0],
+              children: childrenWithSameParent,
+
+     });
+     }
+     else{
+       
+       return true;
+     }
+
+  }
+  const removeAllOutputsToNode=(node)=>{
+    while (schema.links.find(link => link.output === node)) {
+      const linkToRemovetwo = schema.links.find(link => link.output === node);
+      let linkindextwo = schema.links.indexOf(linkToRemovetwo);
+      schema.links.splice(linkindextwo, 1);
+    }
+  }
+  const removeAllInputsToNode=(node)=>{
+    while (schema.links.find(link => link.input === node)) {
+      const linkToRemove = schema.links.find(link => link.input === node);
+      let linkindex = schema.links.indexOf(linkToRemove);
+      schema.links.splice(linkindex, 1);
+    }
+  }
+  const updateParent=(childNodeID,parentNodeID)=>{
+    removeAllOutputsToNode(childNodeID);
+    const newlink={input: parentNodeID, output: childNodeID}
+    schema.links.push(newlink);
+  }
   
  
   const createNode = () => {
     if (selected.length === 0) {
       alert('You must select child nodes before creating a new node');
     }
+    else if(checkForSameParent()===false){
+      alert('Selected Nodes do not have the same parent.');
+    }
     else {
-      let count=1;
-      for(let i=0;i<selected.length;i++){
-        const nodeSelected=schema.nodes.find(node=>node.id===selected[i]);
-        if(nodeSelected.parent!=null){
-          const nodeToUpdate=schema.nodes.find(node=>node.id===nodeSelected.parent);
-          if(count===1){
-            nodeToUpdate.coordinates[1]-=65; 
-            count--;
-          }
-          const linkToDelete=schema.links.find(link=>link.input===nodeToUpdate.id && link.output===selected[i]);
-          
-        }
-        
-
-      }
-      
       let desiredcoordinates = findcoordinates();
+      
+
+
+      if(checkForSameParent()===true){ console.log("No parents were found");}
+     
+     
+      
+      
+      
       console.log(`The desired coordinates for the new node are: (${desiredcoordinates[0]},${desiredcoordinates[1]})`);
       const nextNode = {
         id: `node-${schema.nodes.length + 1}`,
@@ -292,21 +361,109 @@ const UncontrolledDiagram = ({ sentence }) => {
         ,
       };
       addNode(nextNode);
-      addLinks();
-      updateParents(nextNode.id)
-      emptySelected();
-      console.log(JSON.stringify(schema));
+      
+      if(checkForSameParent()!=true)
+      {
+        //CHECK FOR SAME PARENT RETURNS THE PARENT NODE IN COMMON AND THE CHILDREN NODES CONNECTED TO IT
 
-      //empty selected nodes array
-      //selected.length = 0;
-      //setSelected(selected);
+        const ParentCheckResult = checkForSameParent();
+
+        const childrenToUpdate = ParentCheckResult.children;
+        console.log(`The following nodes need their input link deleted: ${childrenToUpdate}`);
+        console.log(childrenToUpdate);
+
+        
+        const immediateParentId = ParentCheckResult.parent;
+        
+        console.log(`They all have the same parent: ${immediateParentId}`)
+        const immediateParentNode = schema.nodes.find(node => node.id === immediateParentId);
+
+        // *****************Update parent*********************************
+        if (immediateParentNode.coordinates[1] === desiredcoordinates[1]) {
+          immediateParentNode.coordinates[1] -= 65;
+        }
+       
+     
+
+        //*****************DELETE LINK TO CHILDREN***********************8/
+        
+        
+        for (let p = 0; p < childrenToUpdate.length; p++) {
+          const linkToUpdate=schema.links.filter(link=>link.input===immediateParentId && link.output===childrenToUpdate[p]);
+          console.log("The links that need to be updated are: ")
+          console.log(linkToUpdate);
+          linksToBeUpdated.push(linkToUpdate);
+
+          // while(schema.links.includes(linkToUpdate)){
+          //   const findindex=schema.links.indexOf(linkToUpdate);
+          //   schema.links.splice(findindex,1);
+
+          // }
+          // for(let m=0;m<linkToUpdate.length;m++){
+          //   linkToUpdate[m].output=nextNode.id;
+          // }
+
+
+         //linkToUpdate.output=nextNode.id;
+        // const filteredLinks=schema.links.filter(link=>link!=linkToUpdate);
+        // removeAllOutputsToNode(childrenToUpdate[p]);
+        }
+        
+
+        
+      }
+      addLinks();
+      updateSelectedNodeParents(nextNode.id)
+      emptySelected();
     }
   }
-  const updateParents=(nextNodeId)=>{
+  const updateSelectedNodeParents=(nextNodeId)=>{
     for (let a=0;a<selected.length;a++){
       const nodeToUpdate= schema.nodes.find(node => node.id === selected[a]);
       nodeToUpdate.parent=nextNodeId;
       console.log(`${selected[a]}'s parent was updated to ${nextNodeId}`);
+    }
+  }
+  const removeUnecessaryLink=()=>{
+    if (linksToBeUpdated.length != 0) {
+      for (let i = 0; i < linksToBeUpdated.length; i++) {
+        //linksToBeUpdated[i].output = `node-${schema.nodes.length-1}`;
+        const indexofcrap=schema.links.indexOf(linksToBeUpdated[i]);
+        schema.links.splice(indexofcrap,1);
+
+
+        //console.log(`The output of ${linksToBeUpdated[i].input} has been updated to ${linksToBeUpdated[i].output}`)
+
+      }
+    }
+  }
+  const updateLink=()=>{
+    if(linksToBeUpdated.length>0){
+    console.log(`Inside update link; printing the links that need to be updated`);
+    console.log(linksToBeUpdated);
+    }
+    if (linksToBeUpdated.length != 0) {
+      for (let i = 0; i < linksToBeUpdated.length; i++) {
+        console.log(`trying to find`)
+        console.log(linksToBeUpdated[i]);
+        const removecrap=schema.links.find(link=>link===linksToBeUpdated[i][0]);
+        console.log(`found removecrap:`);
+        console.log(removecrap)
+        removecrap.output=`node-${schema.nodes.length-1}`
+        const removecraptwo=schema.links.find(link=>link===linksToBeUpdated[i][0]);
+        removecraptwo.output=`node-${schema.nodes.length-1}`
+       
+        console.log(schema.links);
+       
+      //removeAllOutputsToNode(linksToBeUpdated[i].output);
+        
+        //linksToBeUpdated[i].output = `node-${schema.nodes.length-1}`;
+        //schema.links.push(linksToBeUpdated[i]);
+        //console.log(`The output of ${linksToBeUpdated[i].input} has been updated to ${linksToBeUpdated[i].output}`)
+
+      }
+      setLinksToBeUpdated([]);
+    
     }
   }
   const emptySelected=()=>{
@@ -331,7 +488,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
       
       <Diagram style={{ height: '100%', overflow: 'scroll' }} onMouseMove={onChange} schema={schema} />
-      <Button color="primary"  style={{ fontSize: '12px' }} onMouseHover={onChange} onClick={createNode}>Create</Button>
+      <Button color="primary"  style={{ fontSize: '12px' }} onMouseLeave={updateLink} onMouseOver={onChange} onClick={createNode}>Create</Button>
       <Button color="secondary" className="red" style={{ fontSize: '12px' }} onClick={deleteNodeFromSchema}>Delete</Button>
 
       

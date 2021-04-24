@@ -7,7 +7,7 @@ class Form extends React.Component{
     };
     saveSentence=(event)=>{
         let sentence=event.target.value;
-        console.log('Event: ', event.target.value);
+       // console.log('Event: ', event.target.value);
 
         this.setState({ value: event.target.value});
     }
