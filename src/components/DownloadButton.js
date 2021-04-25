@@ -7,7 +7,7 @@ class DownloadButton extends React.Component {
     
     const defaultFileType = "json"; 
     this.fileNames = {
-    	json: "states.json",
+    	json: "formfunction-diagram.json",
       csv: "states.csv",
       text: "states.txt"
     }    
