@@ -1,6 +1,7 @@
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import { Button } from 'beautiful-react-ui';
 import React, { useState, useEffect, useReducer, createContext} from 'react';
+import DownloadButton from './DownloadButton'
 
 import './Diagram.css'
 
@@ -19,6 +20,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
   const [selected, setSelected] = useState([]);
   const [linksToBeUpdated,setLinksToBeUpdated]=useState([]);
+  
 
   let textInput="";
 
@@ -487,6 +489,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
   }
 
+
   return (
     <div style={{ height: '27rem' }}>
 
@@ -498,8 +501,7 @@ const UncontrolledDiagram = ({ sentence }) => {
       <Button color="danger" className="red" style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>
         <img style={{width: '16px', height: 'auto'}} src='images/delete-icon.png'></img></Button>
         <label>Save</label>
-      <Button  className="red" style={{ backgroundColor: '#57a957',fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>
-        <img style={{width: '16px', height: 'auto'}} src='images/save-icon.png'></img></Button>
+        <DownloadButton outputObject={schema} />
       </div>
         
       
