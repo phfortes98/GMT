@@ -77,12 +77,13 @@ const UncontrolledDiagram = ({ sentence }) => {
 
   React.useEffect(() => {
     const wordNodes = sentence.split(" ");
-    console.log(wordNodes);
+    //console.log(wordNodes);
+    const newbasenodes=[];
 
     for(let i=0;i<wordNodes.length;i++){
       const node = {
         id: `node-${i}`,
-        coordinates: [80 + 80 * i, 340],
+        coordinates: [80 + 90 * i, 340],
         content: wordNodes[i],
         level: 1,
         parent: null,
@@ -95,11 +96,15 @@ const UncontrolledDiagram = ({ sentence }) => {
           </div>
         ),
       };
-      if(schema.nodes.length<=wordNodes.length){
-      addNode(node);}
+      newbasenodes.push(node);
+      // if(schema.nodes.length<=wordNodes.length){
+      // addNode(node);}
       
      
     }
+    console.log(newbasenodes);
+    schema.nodes=newbasenodes;
+    
 
    // console.log(JSON.stringify(schema));
 
@@ -366,9 +371,10 @@ const UncontrolledDiagram = ({ sentence }) => {
         )
         ,
       };
-      addNode(nextNode);
+      //addNode(nextNode);
+      schema.nodes.push(nextNode);
       
-      if(checkForSameParent()!=true)
+      if(checkForSameParent()!=true&&checkForSameParent()!=false)
       {
         //CHECK FOR SAME PARENT RETURNS THE PARENT NODE IN COMMON AND THE CHILDREN NODES CONNECTED TO IT
 
@@ -395,10 +401,12 @@ const UncontrolledDiagram = ({ sentence }) => {
         
         
         for (let p = 0; p < childrenToUpdate.length; p++) {
-          const linkToUpdate=schema.links.filter(link=>link.input===immediateParentId && link.output===childrenToUpdate[p]);
+          const linkToUpdate=schema.links.find(link=>link.input===immediateParentId && link.output===childrenToUpdate[p]);
+          
           console.log("The links that need to be updated are: ")
           console.log(linkToUpdate);
           linksToBeUpdated.push(linkToUpdate);
+          linkToUpdate.output=nextNode.id;
 
           // while(schema.links.includes(linkToUpdate)){
           //   const findindex=schema.links.indexOf(linkToUpdate);
@@ -418,7 +426,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
         
       }
-      addLinks();
+      addLinks(nextNode);
       updateSelectedNodeParents(nextNode.id)
       emptySelected();
     }
@@ -456,8 +464,7 @@ const UncontrolledDiagram = ({ sentence }) => {
         console.log(`found removecrap:`);
         console.log(removecrap)
         removecrap.output=`node-${schema.nodes.length-1}`
-        const removecraptwo=schema.links.find(link=>link===linksToBeUpdated[i][0]);
-        removecraptwo.output=`node-${schema.nodes.length-1}`
+        
        
         console.log(schema.links);
        
@@ -477,14 +484,14 @@ const UncontrolledDiagram = ({ sentence }) => {
     toggleSelect(selected[0]);}
   }
   
-  const addLinks=()=>{
-   // let newlink={}
+  const addLinks=(nextNode)=>{
+     let newlink={}
     selected.forEach(function(selectedId){
-      connect(`node-${schema.nodes.length + 1}`,selectedId)
+     // connect(`node-${schema.nodes.length + 1}`,selectedId)
 
-      //newlink={input: nextNode.id, output: selectedId};
-     // console.log(JSON.stringify(newlink));
-     // schema.links.push(newlink);
+        newlink={input: nextNode.id, output: selectedId};
+        console.log(JSON.stringify(newlink));
+        schema.links.push(newlink);
     })
 
   }
@@ -495,7 +502,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
       <div style={{ backgroundColor: '#240090', textAlign: 'center', borderRadius: '4px 4px 0px 0px', height: '32px'}}>
         <label>Create</label>
-      <Button color="primary"  style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px' , height: '22px'}} onMouseLeave={updateLink} onMouseOver={onChange} onClick={createNode}>
+      <Button color="primary"  style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px' , height: '22px'}} onMouseOver={onChange} onClick={createNode}>
         <img style={{width: '16px', height: 'auto'}} src='images/mknode-icon.png'></img></Button>
         <label>Delete</label>
       <Button color="danger" className="red" style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>

@@ -4,11 +4,17 @@ import React, { useState, useEffect, useReducer, createContext} from 'react';
 import DownloadButton from './DownloadButton'
 
 import './Diagram.css'
+const fakeSchema = createSchema({
+  nodes: [
 
+  ]
+});
 
 
 
 const UploadedDiagram = ({ initialschema }) => {
+
+  const [schema, { onChange, addNode, connect, removeNode }] = useSchema(fakeSchema);
   // create diagrams schema
   const conditionalFormDisplay=(id)=>{
     const nodeToCheck=schema.nodes.find(node=>node.id=== id);
@@ -452,7 +458,64 @@ const UploadedDiagram = ({ initialschema }) => {
     })
 
   }
-  const [schema, { onChange, addNode, connect, removeNode }] = useSchema(initialschema);
+  
+  React.useEffect(() => {
+    schema.links=initialschema.links;
+    for(let i=0;i<initialschema.nodes.length;i++){
+      if(initialschema.nodes[i].level===2){
+        const nextNode = {
+          id: initialschema.nodes[i].id,
+          content: initialschema.nodes[i].id,
+          coordinates: [
+            initialschema.nodes[i].coordinates[0],
+            initialschema.nodes[i].coordinates[1],
+          ],
+          parent: initialschema.nodes[i].parent,
+          level: 2,
+          form: initialschema.nodes[i].form,
+          function: initialschema.nodes[i].function,
+          className:'button blue',
+          render: ({id,form}) => (
+            <div id={id} style={{ fontSize: '0.5rem', textAlign: 'left', padding: '4px', width: '70px', height: '40px' }} onClick={() => toggleSelect(id)}>
+              <a>
+                {conditionalFormDisplay(id)}
+  
+              
+                <div>
+                {conditionalFuncDisplay(id)}
+                </div>
+              </a>
+            </div>
+          )
+          ,
+        };
+        addNode(nextNode);
+      }
+      else{
+        const node = {
+          id: initialschema.nodes[i].id,
+          coordinates: initialschema.nodes[i].coordinates,
+          content: initialschema.nodes[i].content,
+          level: 1,
+          parent: initialschema.nodes[i].parent,
+          className: 'button',
+          render: ({id,content}) => (
+            <div onClick={()=>toggleSelect(id)} style={{ width: '70px', fontSize: '0.6rem', textAlign: 'center' }}>
+                
+                  {content}
+                
+            </div>
+          ),
+        };
+        addNode(node);
+      }
+    }
+    
+  
+  
+ 
+
+  },[initialschema]);
 
 
   return (
