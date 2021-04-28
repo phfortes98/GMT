@@ -294,9 +294,11 @@ const UploadedDiagram = ({ initialschema }) => {
   const createNode = () => {
     if (selected.length === 0) {
       alert('You must select child nodes before creating a new node');
+      emptySelected();
     }
     else if(checkForSameParent()===false){
       alert('Selected Nodes do not have the same parent.');
+      emptySelected();
     }
     else {
       let desiredcoordinates = findcoordinates();
@@ -336,9 +338,10 @@ const UploadedDiagram = ({ initialschema }) => {
         )
         ,
       };
-      addNode(nextNode);
+      //addNode(nextNode);
+      schema.nodes.push(nextNode);
       
-      if(checkForSameParent()!=true)
+      if(checkForSameParent()!=true&&checkForSameParent()!=false)
       {
         //CHECK FOR SAME PARENT RETURNS THE PARENT NODE IN COMMON AND THE CHILDREN NODES CONNECTED TO IT
 
@@ -354,21 +357,34 @@ const UploadedDiagram = ({ initialschema }) => {
         console.log(`They all have the same parent: ${immediateParentId}`)
         const immediateParentNode = schema.nodes.find(node => node.id === immediateParentId);
 
-        // *****************Update parent*********************************
-        if (immediateParentNode.coordinates[1] === desiredcoordinates[1]) {
-          immediateParentNode.coordinates[1] -= 65;
+        // *****************UPDATE ANCESTRY COORDINATES*********************************
+        console.log("the immediate full ancestry of the node is:");
+
+        console.log(findancestry(immediateParentId));
+
+        const fullancestry=findancestry(immediateParentId);
+        let parentcoordinateupdate=desiredcoordinates[1];
+        for (let g = 0; g < fullancestry.length; g++) {
+          const currentancestrynode=schema.nodes.find(node=>node.id===fullancestry[g]);
+          if (currentancestrynode.coordinates[1] === parentcoordinateupdate) {
+            currentancestrynode.coordinates[1] -= 65;
+            parentcoordinateupdate -= 65;
+          }
+         // currentancestrynode.coordinates[1]-=65;
         }
+      
        
      
 
-        //*****************DELETE LINK TO CHILDREN***********************8/
+        //*****************UPDATE LINK TO CHILDREN***********************8/
         
         
         for (let p = 0; p < childrenToUpdate.length; p++) {
-          const linkToUpdate=schema.links.filter(link=>link.input===immediateParentId && link.output===childrenToUpdate[p]);
+          const linkToUpdate=schema.links.find(link=>link.input===immediateParentId && link.output===childrenToUpdate[p]);
+          
           console.log("The links that need to be updated are: ")
           console.log(linkToUpdate);
-          linksToBeUpdated.push(linkToUpdate);
+          linkToUpdate.output=nextNode.id;
 
           // while(schema.links.includes(linkToUpdate)){
           //   const findindex=schema.links.indexOf(linkToUpdate);
@@ -384,11 +400,11 @@ const UploadedDiagram = ({ initialschema }) => {
         // const filteredLinks=schema.links.filter(link=>link!=linkToUpdate);
         // removeAllOutputsToNode(childrenToUpdate[p]);
         }
-        
+        nextNode.parent=immediateParentId;
 
         
       }
-      addLinks();
+      addLinks(nextNode);
       updateSelectedNodeParents(nextNode.id)
       emptySelected();
     }
@@ -413,51 +429,37 @@ const UploadedDiagram = ({ initialschema }) => {
       }
     }
   }
-  const updateLink=()=>{
-    if(linksToBeUpdated.length>0){
-    console.log(`Inside update link; printing the links that need to be updated`);
-    console.log(linksToBeUpdated);
+  const findancestry=(nodeId)=>{
+    let currentnode=nodeId;
+    let fullancestry=[nodeId];
+    let stoploop=false;
+    while(stoploop!=true){
+    const node=schema.nodes.find(node=>node.id===currentnode);
+    if(node.parent!=null){ 
+      fullancestry.push(node.parent);
+      currentnode=node.parent;
     }
-    if (linksToBeUpdated.length != 0) {
-      for (let i = 0; i < linksToBeUpdated.length; i++) {
-        console.log(`trying to find`)
-        console.log(linksToBeUpdated[i]);
-        const removecrap=schema.links.find(link=>link===linksToBeUpdated[i][0]);
-        console.log(`found removecrap:`);
-        console.log(removecrap)
-        removecrap.output=`node-${schema.nodes.length-1}`
-        const removecraptwo=schema.links.find(link=>link===linksToBeUpdated[i][0]);
-        removecraptwo.output=`node-${schema.nodes.length-1}`
-       
-        console.log(schema.links);
-       
-      //removeAllOutputsToNode(linksToBeUpdated[i].output);
-        
-        //linksToBeUpdated[i].output = `node-${schema.nodes.length-1}`;
-        //schema.links.push(linksToBeUpdated[i]);
-        //console.log(`The output of ${linksToBeUpdated[i].input} has been updated to ${linksToBeUpdated[i].output}`)
-
-      }
-      setLinksToBeUpdated([]);
-    
+    else{stoploop=true;}
     }
+    return fullancestry;
   }
+  
   const emptySelected=()=>{
     while(selected.length>0){
     toggleSelect(selected[0]);}
   }
   
-  const addLinks=()=>{
-   // let newlink={}
-    selected.forEach(function(selectedId){
-      connect(`node-${schema.nodes.length + 1}`,selectedId)
+  const addLinks=(nextNode)=>{
+    let newlink={}
+   selected.forEach(function(selectedId){
+    // connect(`node-${schema.nodes.length + 1}`,selectedId)
 
-      //newlink={input: nextNode.id, output: selectedId};
-     // console.log(JSON.stringify(newlink));
-     // schema.links.push(newlink);
-    })
+       newlink={input: nextNode.id, output: selectedId};
+       console.log(JSON.stringify(newlink));
+       schema.links.push(newlink);
+   })
 
-  }
+ }
   
   React.useEffect(() => {
     schema.links=initialschema.links;
@@ -489,7 +491,7 @@ const UploadedDiagram = ({ initialschema }) => {
           )
           ,
         };
-        addNode(nextNode);
+        schema.nodes.push(nextNode);
       }
       else{
         const node = {
@@ -507,7 +509,7 @@ const UploadedDiagram = ({ initialschema }) => {
             </div>
           ),
         };
-        addNode(node);
+        schema.nodes.push(node);
       }
     }
     
@@ -523,7 +525,7 @@ const UploadedDiagram = ({ initialschema }) => {
 
       <div style={{ backgroundColor: '#240090', textAlign: 'center', borderRadius: '4px 4px 0px 0px', height: '32px'}}>
         <label>Create</label>
-      <Button color="primary"  style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px' , height: '22px'}} onMouseLeave={updateLink} onMouseOver={onChange} onClick={createNode}>
+      <Button color="primary"  style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px' , height: '22px'}} onMouseOver={onChange} onClick={createNode}>
         <img style={{width: '16px', height: 'auto'}} src='images/mknode-icon.png'></img></Button>
         <label>Delete</label>
       <Button color="danger" className="red" style={{ fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={deleteNodeFromSchema}>

@@ -17,11 +17,7 @@ const UncontrolledDiagram = ({ sentence }) => {
   // create diagrams schema
 
   const [schema, { onChange, addNode, connect, removeNode }] = useSchema(initialSchema);
-
   const [selected, setSelected] = useState([]);
-  const [linksToBeUpdated,setLinksToBeUpdated]=useState([]);
-  
-
   let textInput="";
 
   
@@ -390,14 +386,26 @@ const UncontrolledDiagram = ({ sentence }) => {
         console.log(`They all have the same parent: ${immediateParentId}`)
         const immediateParentNode = schema.nodes.find(node => node.id === immediateParentId);
 
-        // *****************Update parent*********************************
-        if (immediateParentNode.coordinates[1] === desiredcoordinates[1]) {
-          immediateParentNode.coordinates[1] -= 65;
+        // *****************UPDATE ANCESTRY COORDINATES*********************************
+        console.log("the immediate full ancestry of the node is:");
+
+        console.log(findancestry(immediateParentId));
+
+        const fullancestry=findancestry(immediateParentId);
+        let parentcoordinateupdate=desiredcoordinates[1];
+        for (let g = 0; g < fullancestry.length; g++) {
+          const currentancestrynode=schema.nodes.find(node=>node.id===fullancestry[g]);
+          if (currentancestrynode.coordinates[1] === parentcoordinateupdate) {
+            currentancestrynode.coordinates[1] -= 65;
+            parentcoordinateupdate -= 65;
+          }
+         // currentancestrynode.coordinates[1]-=65;
         }
+      
        
      
 
-        //*****************DELETE LINK TO CHILDREN***********************8/
+        //*****************UPDATE LINK TO CHILDREN***********************8/
         
         
         for (let p = 0; p < childrenToUpdate.length; p++) {
@@ -405,7 +413,6 @@ const UncontrolledDiagram = ({ sentence }) => {
           
           console.log("The links that need to be updated are: ")
           console.log(linkToUpdate);
-          linksToBeUpdated.push(linkToUpdate);
           linkToUpdate.output=nextNode.id;
 
           // while(schema.links.includes(linkToUpdate)){
@@ -422,7 +429,7 @@ const UncontrolledDiagram = ({ sentence }) => {
         // const filteredLinks=schema.links.filter(link=>link!=linkToUpdate);
         // removeAllOutputsToNode(childrenToUpdate[p]);
         }
-        
+        nextNode.parent=immediateParentId;
 
         
       }
@@ -438,50 +445,24 @@ const UncontrolledDiagram = ({ sentence }) => {
       console.log(`${selected[a]}'s parent was updated to ${nextNodeId}`);
     }
   }
-  const removeUnecessaryLink=()=>{
-    if (linksToBeUpdated.length != 0) {
-      for (let i = 0; i < linksToBeUpdated.length; i++) {
-        //linksToBeUpdated[i].output = `node-${schema.nodes.length-1}`;
-        const indexofcrap=schema.links.indexOf(linksToBeUpdated[i]);
-        schema.links.splice(indexofcrap,1);
-
-
-        //console.log(`The output of ${linksToBeUpdated[i].input} has been updated to ${linksToBeUpdated[i].output}`)
-
-      }
-    }
-  }
-  const updateLink=()=>{
-    if(linksToBeUpdated.length>0){
-    console.log(`Inside update link; printing the links that need to be updated`);
-    console.log(linksToBeUpdated);
-    }
-    if (linksToBeUpdated.length != 0) {
-      for (let i = 0; i < linksToBeUpdated.length; i++) {
-        console.log(`trying to find`)
-        console.log(linksToBeUpdated[i]);
-        const removecrap=schema.links.find(link=>link===linksToBeUpdated[i][0]);
-        console.log(`found removecrap:`);
-        console.log(removecrap)
-        removecrap.output=`node-${schema.nodes.length-1}`
-        
-       
-        console.log(schema.links);
-       
-      //removeAllOutputsToNode(linksToBeUpdated[i].output);
-        
-        //linksToBeUpdated[i].output = `node-${schema.nodes.length-1}`;
-        //schema.links.push(linksToBeUpdated[i]);
-        //console.log(`The output of ${linksToBeUpdated[i].input} has been updated to ${linksToBeUpdated[i].output}`)
-
-      }
-      setLinksToBeUpdated([]);
-    
-    }
-  }
+  
   const emptySelected=()=>{
     while(selected.length>0){
     toggleSelect(selected[0]);}
+  }
+  const findancestry=(nodeId)=>{
+    let currentnode=nodeId;
+    let fullancestry=[nodeId];
+    let stoploop=false;
+    while(stoploop!=true){
+    const node=schema.nodes.find(node=>node.id===currentnode);
+    if(node.parent!=null){ 
+      fullancestry.push(node.parent);
+      currentnode=node.parent;
+    }
+    else{stoploop=true;}
+    }
+    return fullancestry;
   }
   
   const addLinks=(nextNode)=>{
