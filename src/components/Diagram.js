@@ -79,7 +79,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     for(let i=0;i<wordNodes.length;i++){
       const node = {
         id: `node-${i}`,
-        coordinates: [80 + 90 * i, 340],
+        coordinates: [80 + 100 * i, 340],
         content: wordNodes[i],
         level: 1,
         parent: null,
@@ -123,6 +123,7 @@ const UncontrolledDiagram = ({ sentence }) => {
         emptySelected();
         return;
       }
+      
 
       //Remove all links
       while (schema.links.find(link => link.input === selected[0])) {
@@ -152,9 +153,20 @@ const UncontrolledDiagram = ({ sentence }) => {
       //     }
       //   }
       // }
+      //*************UPDATE CHILDREN NODE PARENTS TO NULL***************/
+      while(schema.nodes.find(node=>node.parent===selected[0])){
+        const nodeToupdateParent=schema.nodes.find(node=>node.parent===selected[0]);
+        console.log(`Updating children nodes parent property: found children ${nodeToupdateParent.id} whose parent is ${nodeToupdateParent.parent}`);
+        nodeToupdateParent.parent=null;
+        console.log(`${nodeToupdateParent.id}'s parent is now ${nodeToupdateParent.parent} ***`);
+        
+      }
 
-      removeNode(nodeToRemove);
+      const indexofnode=schema.nodes.indexOf(nodeToRemove);
       emptySelected();
+      schema.nodes.splice(indexofnode,1);
+      
+      
     }
     
   };
@@ -231,7 +243,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     if(nodeToCheck.form===null){
       return(
         <div>
-          <label>Form: </label><input style={{ width: '25px', height: '12px' }} onChange={handleTextChange} type='text'></input>
+          <label>Form: </label><input style={{ width: '35px', height: '12px' }} onChange={handleTextChange} type='text'></input>
           <button className='buttonInputSubmit' onClick={()=>handleFormSubmit(id)}>+</button>
         </div>
       )
@@ -249,7 +261,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     if(nodeToCheck.function===null){
       return(
         <div style={{marginTop: '-4px'}}>
-          <label>Func: </label><input style={{ width: '25px', height: '12px' }} onChange={handleTextChange} type='text'></input>
+          <label>Func: </label><input style={{ width: '35px', height: '12px' }} onChange={handleTextChange} type='text'></input>
           <button className='buttonInputSubmit' onClick={()=>handleFuncSubmit(id)}>+</button>
         </div>
       )
