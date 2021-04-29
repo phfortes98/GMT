@@ -79,7 +79,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     for(let i=0;i<wordNodes.length;i++){
       const node = {
         id: `node-${i}`,
-        coordinates: [80 + 100 * i, 340],
+        coordinates: [30 + 90 * i, 390],
         content: wordNodes[i],
         level: 1,
         parent: null,
@@ -509,7 +509,7 @@ const UncontrolledDiagram = ({ sentence }) => {
 
 
   return (
-    <div style={{ height: '27rem' }}>
+    <div style={{ height: '29rem' }}>
 
       <div style={{ backgroundColor: '#240090', textAlign: 'center', borderRadius: '4px 4px 0px 0px', height: '32px'}}>
         <label>Create</label>

@@ -552,7 +552,7 @@ const UploadedDiagram = ({ initialschema }) => {
 
 
   return (
-    <div style={{ height: '27rem' }}>
+    <div style={{ height: '29rem' }}>
 
       <div style={{ backgroundColor: '#240090', textAlign: 'center', borderRadius: '4px 4px 0px 0px', height: '32px'}}>
         <label>Create</label>
