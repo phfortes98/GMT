@@ -25,7 +25,7 @@ class Form extends React.Component{
         <form>
             <p>Enter your Input Sentence: </p>
             <input type="text" onChange={this.saveSentence}/>
-            <button type='submit' onClick={this.handleSubmit}>Submit</button>
+            <button type='submit' data-dismiss="modal" onClick={this.handleSubmit}>Submit</button>
         </form>
         );
     }

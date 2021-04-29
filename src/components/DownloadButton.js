@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './DownloadButton.css'
 
 class DownloadButton extends React.Component {
   constructor(props) {
@@ -115,7 +116,7 @@ class DownloadButton extends React.Component {
       
         
           <div style={{display: 'inline'}}>
-          <button style={{ backgroundColor: '#57a957',fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={this.download}>
+          <button className="savebutton" style={{fontSize: '12px', margin: '5px', borderStyle:'none', borderRadius: '4px', width: '40px', height: '22px' }} onClick={this.download}>
           <img style={{width: '16px', height: 'auto'}} src='images/save-icon.png'></img>
           
           </button>

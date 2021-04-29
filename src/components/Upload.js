@@ -45,7 +45,7 @@ class Upload extends React.Component{
             onChange={evt => this.openFile(evt)}
             ref={e=>this.dofileUpload = e}
           />
-          <button type='submit' onClick={this.handleSubmit}>Submit</button>
+          <button type='submit' data-dismiss="modal" onClick={this.handleSubmit}>Submit</button>
           </div>
         );
     }

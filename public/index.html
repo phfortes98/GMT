@@ -39,7 +39,7 @@
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <div class="row">
@@ -120,9 +120,9 @@
               Help
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">View Documentation</a>
+              <a class="dropdown-item" target="_blank" href="./UserGuide.pdf">View Documentation</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Report Bug</a>
+              <a class="dropdown-item" target="_blank" href="www.outlook.com">Report Bug</a>
             </div>
           </li>
 
@@ -288,7 +288,7 @@
 
     <!--footer-->
     <nav class="footer navbar justify-content-center fixed-bottom navbar-light"
-      style="background-color: #2e206d; text-align: center;">
+      style="background-color: #2e206d; text-align: center; height: 45px">
 
       <div class="footer-buttons" id='footer-buttons'>
 
@@ -355,7 +355,7 @@
          style.appendChild(document.createTextNode(css));
         }
 
-head.appendChild(style);
+      head.appendChild(style);
       window.print();
       document.body.innerHTML = restorepage;
     }
