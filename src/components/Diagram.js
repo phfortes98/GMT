@@ -123,7 +123,27 @@ const UncontrolledDiagram = ({ sentence }) => {
         emptySelected();
         return;
       }
-      
+      const listofParents=findancestry(selected[0]);
+      listofParents.shift();
+      if(listofParents.length>0){
+        console.log(`Deleting node: the list of parents for the node is: ${listofParents}`);
+        for(let q=listofParents.length-1;q>-1;q--){
+          removeAllLinksToNode(listofParents[q]);
+          const parentToRemove=schema.nodes.find(node=>node.id===listofParents[q]);
+          while(schema.nodes.find(node=>node.parent===listofParents[q])){
+            const g=schema.nodes.find(node=>node.parent===listofParents[q]);
+           // console.log(`Updating children nodes parent property: found children ${nodeToupdateParent.id} whose parent is ${nodeToupdateParent.parent}`);
+            g.parent=null;
+           // console.log(`${nodeToupdateParent.id}'s parent is now ${nodeToupdateParent.parent} ***`);
+            
+          }
+    
+          const indexparent=schema.nodes.indexOf(parentToRemove);
+          schema.nodes.splice(indexparent,1);
+
+
+        }
+      }
 
       //Remove all links
       while (schema.links.find(link => link.input === selected[0])) {
@@ -170,7 +190,7 @@ const UncontrolledDiagram = ({ sentence }) => {
     }
     
   };
-  const deleteNodeById=(nodeId)=>{
+  const removeAllLinksToNode = (nodeId) => {
     while (schema.links.find(link => link.input === nodeId)) {
       const linkToRemove = schema.links.find(link => link.input == nodeId);
       let linkindex = schema.links.indexOf(linkToRemove);
@@ -181,8 +201,6 @@ const UncontrolledDiagram = ({ sentence }) => {
       let linkindextwo = schema.links.indexOf(linkToRemovetwo);
       schema.links.splice(linkindextwo, 1);
     }
-    removeNode(nodeId);
-    emptySelected();
   }
 
   const findcoordinates=()=>{
