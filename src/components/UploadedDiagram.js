@@ -127,6 +127,7 @@ const UploadedDiagram = ({ initialschema }) => {
         emptySelected();
         return;
       }
+      
 
       //Remove all links
       while (schema.links.find(link => link.input === selected[0])) {
@@ -156,9 +157,20 @@ const UploadedDiagram = ({ initialschema }) => {
       //     }
       //   }
       // }
+      //*************UPDATE CHILDREN NODE PARENTS TO NULL***************/
+      while(schema.nodes.find(node=>node.parent===selected[0])){
+        const nodeToupdateParent=schema.nodes.find(node=>node.parent===selected[0]);
+        console.log(`Updating children nodes parent property: found children ${nodeToupdateParent.id} whose parent is ${nodeToupdateParent.parent}`);
+        nodeToupdateParent.parent=null;
+        console.log(`${nodeToupdateParent.id}'s parent is now ${nodeToupdateParent.parent} ***`);
+        
+      }
 
-      removeNode(nodeToRemove);
+      const indexofnode=schema.nodes.indexOf(nodeToRemove);
       emptySelected();
+      schema.nodes.splice(indexofnode,1);
+      
+      
     }
     
   };
